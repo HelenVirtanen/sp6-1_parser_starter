@@ -15,7 +15,9 @@ function getMetaContent(name) {
 
 function getMetaOpengraph() {
     const opengraph = {};
+
     const ogProperties = document.querySelectorAll('meta[property^="og:"]');
+
     for (let ogProperty of ogProperties) {
         const ogPropertyType = ogProperty.getAttribute('property').split(":")[1];
         let ogContent = ogProperty.getAttribute("content");
@@ -36,7 +38,7 @@ function getMetaOpengraph() {
 function getMeta() {
     const meta = {};
     
-    meta.title = document.querySelector("h1.title").textContent;
+    meta.title = getTwoFirstWords(document.querySelector("title").textContent);
     meta.description = getMetaContent('description');
     meta.keywords = getMetaContent('keywords').split(",");
     meta.language = document.documentElement.lang;
@@ -44,14 +46,20 @@ function getMeta() {
 
 
     console.log(meta);
-    return meta
+    return meta;
 }
 
-getMeta();
+function getProduct() {
+    const product = {}
 
-// function getProduct() {
+    product.id = document.querySelector(".product").dataset.id;
+    product.name = document.querySelector("h1.title").textContent;
 
-// }
+    const likeButton = document.querySelector(".like");
+    product.isLiked = likeButton.classList.contains("active");
+
+    return product;
+}
 
 // function getSuggested() {
 
@@ -61,13 +69,13 @@ getMeta();
 
 // }
 
-// function parsePage() {
-//     return {
-//         meta: {},
-//         product: {},
-//         suggested: [],
-//         reviews: []
-//     };
-// }
+function parsePage() {
+    return {
+        meta: getMeta(),
+        product: getProduct(),
+        suggested: [],
+        reviews: []
+    };
+}
 
 // window.parsePage = parsePage;
