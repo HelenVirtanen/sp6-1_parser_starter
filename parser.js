@@ -84,8 +84,9 @@ function getProduct() {
   product.tags = getTags(tagsList);
 
   const price = document.querySelector(".price");
-  product.price = price.firstChild.textContent.trim().replace("₽", "");
-  product.oldPrice = price.querySelector("span").textContent.trim().replace("₽", "");
+  product.price = +price.firstChild.textContent.trim().replace("₽", "");
+  product.oldPrice = +price.querySelector("span").textContent.trim().replace("₽", "");
+  product.discount = product.oldPrice - product.price;
 
   return product;
 }
