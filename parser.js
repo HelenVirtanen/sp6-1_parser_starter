@@ -3,11 +3,6 @@ function getHeading(str) {
   return str.split("—")[0].trim();
 }
 
-function getShortPath(path) {
-  const lastSlash = path.lastIndexOf("/");
-  return path.slice(lastSlash);
-}
-
 function getMetaContent(name) {
   let metaAttribute = document.querySelector(`meta[name="${name}"]`);
   return metaAttribute.getAttribute("content").trim();
@@ -28,7 +23,7 @@ function getMetaOpengraph() {
 
   for (let ogProperty of ogProperties) {
     const ogPropertyType = ogProperty.getAttribute("property").split(":")[1];
-    let ogContent = ogProperty.getAttribute("content");
+    let ogContent = ogProperty.getAttribute("content").trim();
     opengraph[ogPropertyType] = ogContent;
 
     if (ogPropertyType === "title") {
@@ -36,7 +31,7 @@ function getMetaOpengraph() {
     }
 
     if (ogPropertyType === "image") {
-      opengraph.image = getShortPath(ogContent);
+      opengraph.image = ogContent;
     }
   }
 
