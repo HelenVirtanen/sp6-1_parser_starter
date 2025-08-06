@@ -207,6 +207,10 @@ function getAuthor(element) {
     return author;
 }
 
+function formatDate(date) {
+  return date.split("/").join(".");
+}
+
 function getReviews() {
     const reviews = [];
 
@@ -224,7 +228,8 @@ function getReviews() {
         reviewItem.title = item.querySelector("h3.title").textContent.trim();
         reviewItem.description = item.querySelector("h3.title + p").textContent.trim();
 
-        reviewItem.date = author.querySelector("i").textContent.trim();
+        const date = author.querySelector("i").textContent.trim();
+        reviewItem.date = formatDate(date);
 
         reviews.push(reviewItem);
     })
