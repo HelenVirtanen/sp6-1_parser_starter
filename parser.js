@@ -13,6 +13,14 @@ function getMetaContent(name) {
   return metaAttribute.getAttribute("content").trim();
 }
 
+function getMetaKeywords() {
+  const keywords = getMetaContent("keywords")
+    .split(",")
+    .map((word) => word.trim());
+
+  return keywords;
+}
+
 function getMetaOpengraph() {
   const opengraph = {};
 
@@ -24,7 +32,7 @@ function getMetaOpengraph() {
     opengraph[ogPropertyType] = ogContent;
 
     if (ogPropertyType === "title") {
-      opengraph.title = ogContent.trim().split(" ").slice(0, 2).join(" ");;
+      opengraph.title = ogContent.trim().split(" ").slice(0, 2).join(" ");
     }
 
     if (ogPropertyType === "image") {
@@ -40,7 +48,7 @@ function getMeta() {
 
   meta.title = getHeading(document.querySelector("title").textContent);
   meta.description = getMetaContent("description");
-  meta.keywords = getMetaContent("keywords").split(",");
+  meta.keywords = getMetaKeywords();
   meta.language = document.documentElement.lang;
   meta.opengraph = getMetaOpengraph();
 
@@ -118,18 +126,18 @@ function getClearHtmlElement(element) {
 }
 
 function getImages(arr) {
-    const images = [];
+  const images = [];
 
-    arr.forEach(item => {
-        const image = {};
-        const imageElement = item.querySelector("img");
-        image.preview = imageElement.getAttribute("src");
-        image.full = imageElement.dataset.src;
-        image.alt = imageElement.getAttribute("alt");
-        images.push(image);
-    })
+  arr.forEach((item) => {
+    const image = {};
+    const imageElement = item.querySelector("img");
+    image.preview = imageElement.getAttribute("src");
+    image.full = imageElement.dataset.src;
+    image.alt = imageElement.getAttribute("alt");
+    images.push(image);
+  });
 
-    return images;
+  return images;
 }
 
 function getProduct() {
@@ -170,41 +178,43 @@ function getProduct() {
 }
 
 function getSuggested() {
-    const suggested = [];
+  const suggested = [];
 
-    const suggestedList = document.querySelectorAll(".suggested .items article");
+  const suggestedList = document.querySelectorAll(".suggested .items article");
 
-    suggestedList.forEach(item => {
-        const suggestedItem = {};
-        suggestedItem.name = item.querySelector("h3").textContent.trim();
-        suggestedItem.description = item.querySelector("p").textContent.trim();
-        suggestedItem.image = item.querySelector("img").getAttribute("src");
-        suggestedItem.price = item.querySelector("b").textContent.slice(1);
-        suggestedItem.currency = getCurrency(item.querySelector("b").textContent[0]);
-        suggested.push(suggestedItem);
-    })
+  suggestedList.forEach((item) => {
+    const suggestedItem = {};
+    suggestedItem.name = item.querySelector("h3").textContent.trim();
+    suggestedItem.description = item.querySelector("p").textContent.trim();
+    suggestedItem.image = item.querySelector("img").getAttribute("src");
+    suggestedItem.price = item.querySelector("b").textContent.slice(1);
+    suggestedItem.currency = getCurrency(
+      item.querySelector("b").textContent[0]
+    );
+    suggested.push(suggestedItem);
+  });
 
-    return suggested;
+  return suggested;
 }
 
 function getRating(arr, cls) {
-    let rating = 0;
-    arr.forEach(point => {
-        if (point.classList.contains(cls)) {
-            rating++;
-        }
-    })
+  let rating = 0;
+  arr.forEach((point) => {
+    if (point.classList.contains(cls)) {
+      rating++;
+    }
+  });
 
-    return rating;
+  return rating;
 }
 
 function getAuthor(element) {
-    const author = {};
+  const author = {};
 
-    author.avatar = element.querySelector("img").getAttribute("src");
-    author.name = element.querySelector("span").textContent.trim();
+  author.avatar = element.querySelector("img").getAttribute("src");
+  author.name = element.querySelector("span").textContent.trim();
 
-    return author;
+  return author;
 }
 
 function formatDate(date) {
@@ -212,29 +222,31 @@ function formatDate(date) {
 }
 
 function getReviews() {
-    const reviews = [];
+  const reviews = [];
 
-    const reviewsList = document.querySelectorAll(".reviews .items article");
+  const reviewsList = document.querySelectorAll(".reviews .items article");
 
-    reviewsList.forEach(item => {
-        const reviewItem = {};
+  reviewsList.forEach((item) => {
+    const reviewItem = {};
 
-        const ratingPoints = item.querySelectorAll(".rating span"); 
-        reviewItem.rating = getRating(ratingPoints, "filled");
+    const ratingPoints = item.querySelectorAll(".rating span");
+    reviewItem.rating = getRating(ratingPoints, "filled");
 
-        const author = item.querySelector(".author");
-        reviewItem.author = getAuthor(author);
+    const author = item.querySelector(".author");
+    reviewItem.author = getAuthor(author);
 
-        reviewItem.title = item.querySelector("h3.title").textContent.trim();
-        reviewItem.description = item.querySelector("h3.title + p").textContent.trim();
+    reviewItem.title = item.querySelector("h3.title").textContent.trim();
+    reviewItem.description = item
+      .querySelector("h3.title + p")
+      .textContent.trim();
 
-        const date = author.querySelector("i").textContent.trim();
-        reviewItem.date = formatDate(date);
+    const date = author.querySelector("i").textContent.trim();
+    reviewItem.date = formatDate(date);
 
-        reviews.push(reviewItem);
-    })
+    reviews.push(reviewItem);
+  });
 
-    return reviews;
+  return reviews;
 }
 
 function parsePage() {
