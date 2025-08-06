@@ -169,9 +169,23 @@ function getProduct() {
   return product;
 }
 
-// function getSuggested() {
+function getSuggested() {
+    const suggested = [];
 
-// }
+    const suggestedList = document.querySelectorAll(".suggested .items article");
+
+    suggestedList.forEach(item => {
+        const suggestedItem = {};
+        suggestedItem.name = item.querySelector("h3").textContent.trim();
+        suggestedItem.description = item.querySelector("p").textContent.trim();
+        suggestedItem.image = item.querySelector("img").getAttribute("src");
+        suggestedItem.price = item.querySelector("b").textContent.slice(1);
+        suggestedItem.currency = getCurrency(item.querySelector("b").textContent[0]);
+        suggested.push(suggestedItem);
+    })
+
+    return suggested;
+}
 
 // function getReviews() {
 
@@ -181,7 +195,7 @@ function parsePage() {
   return {
     meta: getMeta(),
     product: getProduct(),
-    suggested: [],
+    suggested: getSuggested(),
     reviews: [],
   };
 }
