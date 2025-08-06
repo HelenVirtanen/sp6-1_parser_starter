@@ -72,35 +72,49 @@ function getTags(arr) {
 }
 
 function calculateDiscount(oldprice, newprice) {
-    return oldprice - newprice;
+  return oldprice - newprice;
 }
 
 function calculateDiscountPercent(oldPrice, discount) {
-    return ((discount * 100) / oldPrice).toFixed(2);
-};
+  return ((discount * 100) / oldPrice).toFixed(2);
+}
 
 function getCurrency(currency) {
-    const currenciesMap = {
-        '₽': "RUB",
-        '$': "USD",
-    }
+  const currenciesMap = {
+    "₽": "RUB",
+    $: "USD",
+  };
 
-    return currenciesMap[currency];
+  return currenciesMap[currency];
 }
 
 function getProperties(arr) {
-    const properties = {};
+  const properties = {};
 
-   arr.forEach((property) => {
-        const propItems = property.querySelectorAll("span");
-        if (propItems.length >= 2) {
-            const key = propItems[0].textContent.trim();
-            const value = propItems[1].textContent.trim();
-            properties[key] = value;
-        }
-    })
+  arr.forEach((property) => {
+    const propItems = property.querySelectorAll("span");
+    if (propItems.length >= 2) {
+      const key = propItems[0].textContent.trim();
+      const value = propItems[1].textContent.trim();
+      properties[key] = value;
+    }
+  });
 
-    return properties;
+  return properties;
+}
+
+function getClearHtmlElement(element) {
+  if (!element) return "";
+  
+  const resultElement = element.cloneNode(true);
+
+  resultElement.querySelectorAll("*").forEach((elem) => {
+    elem.removeAttribute("class");
+    elem.removeAttribute("id");
+    elem.removeAttribute("style");
+  });
+
+  return resultElement.innerHTML.trim();
 }
 
 function getProduct() {
@@ -117,13 +131,22 @@ function getProduct() {
 
   const price = document.querySelector(".price");
   product.price = +price.firstChild.textContent.trim().replace("₽", "");
-  product.oldPrice = +price.querySelector("span").textContent.trim().replace("₽", "");
+  product.oldPrice = +price
+    .querySelector("span")
+    .textContent.trim()
+    .replace("₽", "");
   product.discount = calculateDiscount(product.oldPrice, product.price);
-  product.discountPercent = calculateDiscountPercent(product.oldPrice, product.discount);
+  product.discountPercent = calculateDiscountPercent(
+    product.oldPrice,
+    product.discount
+  );
   product.currency = getCurrency(price.textContent.trim()[0]);
 
   const properties = document.querySelectorAll(".properties li");
   product.properties = getProperties(properties);
+
+  const description = document.querySelector(".description");
+  product.description = getClearHtmlElement(description);
 
   return product;
 }
