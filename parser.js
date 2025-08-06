@@ -105,7 +105,7 @@ function getProperties(arr) {
 
 function getClearHtmlElement(element) {
   if (!element) return "";
-  
+
   const resultElement = element.cloneNode(true);
 
   resultElement.querySelectorAll("*").forEach((elem) => {
@@ -115,6 +115,21 @@ function getClearHtmlElement(element) {
   });
 
   return resultElement.innerHTML.trim();
+}
+
+function getImages(arr) {
+    const images = [];
+
+    arr.forEach(item => {
+        const image = {};
+        const imageElement = item.querySelector("img");
+        image.preview = imageElement.getAttribute("src");
+        image.full = imageElement.dataset.src;
+        image.alt = imageElement.getAttribute("alt");
+        images.push(image);
+    })
+
+    return images;
 }
 
 function getProduct() {
@@ -147,6 +162,9 @@ function getProduct() {
 
   const description = document.querySelector(".description");
   product.description = getClearHtmlElement(description);
+
+  const images = document.querySelectorAll(".preview nav button");
+  product.images = getImages(images);
 
   return product;
 }
