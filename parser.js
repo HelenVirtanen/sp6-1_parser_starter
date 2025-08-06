@@ -187,6 +187,17 @@ function getSuggested() {
     return suggested;
 }
 
+function getRating(arr, cls) {
+    const rating = 0;
+    arr.forEach(point => {
+        if (point.classList.contains(cls)) {
+            rating++;
+        }
+    })
+
+    return rating;
+}
+
 function getReviews() {
     const reviews = [];
 
@@ -198,11 +209,7 @@ function getReviews() {
         reviewItem.rating = 0;
 
         const ratingPoints = item.querySelectorAll(".rating span"); 
-        ratingPoints.forEach(point => {
-            if (point.classList.contains("filled")) {
-                reviewItem.rating++;
-            }
-        })
+        reviewItem.rating = getRating(ratingPoints, "filled");
 
         reviews.push(reviewItem);
     })
