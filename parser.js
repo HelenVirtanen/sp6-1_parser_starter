@@ -1,6 +1,6 @@
 // @todo: напишите здесь код парсера
-function getTwoFirstWords(str) {
-  return str.trim().split(" ").slice(0, 2).join(" ");
+function getHeading(str) {
+  return str.split("—")[0].trim();
 }
 
 function getShortPath(path) {
@@ -24,7 +24,7 @@ function getMetaOpengraph() {
     opengraph[ogPropertyType] = ogContent;
 
     if (ogPropertyType === "title") {
-      opengraph.title = getTwoFirstWords(ogContent);
+      opengraph.title = ogContent.trim().split(" ").slice(0, 2).join(" ");;
     }
 
     if (ogPropertyType === "image") {
@@ -38,7 +38,7 @@ function getMetaOpengraph() {
 function getMeta() {
   const meta = {};
 
-  meta.title = getTwoFirstWords(document.querySelector("title").textContent);
+  meta.title = getHeading(document.querySelector("title").textContent);
   meta.description = getMetaContent("description");
   meta.keywords = getMetaContent("keywords").split(",");
   meta.language = document.documentElement.lang;
@@ -188,7 +188,7 @@ function getSuggested() {
 }
 
 function getRating(arr, cls) {
-    const rating = 0;
+    let rating = 0;
     arr.forEach(point => {
         if (point.classList.contains(cls)) {
             rating++;
@@ -196,6 +196,15 @@ function getRating(arr, cls) {
     })
 
     return rating;
+}
+
+function getAuthor(element) {
+    const author = {};
+
+    author.avatar = element.querySelector("img").getAttribute("src");
+    author.name = element.querySelector("span").textContent.trim();
+
+    return author;
 }
 
 function getReviews() {
@@ -206,10 +215,16 @@ function getReviews() {
     reviewsList.forEach(item => {
         const reviewItem = {};
 
-        reviewItem.rating = 0;
-
         const ratingPoints = item.querySelectorAll(".rating span"); 
         reviewItem.rating = getRating(ratingPoints, "filled");
+
+        const author = item.querySelector(".author");
+        reviewItem.author = getAuthor(author);
+
+        reviewItem.title = item.querySelector("h3.title").textContent.trim();
+        reviewItem.description = item.querySelector("h3.title + p").textContent.trim();
+
+        reviewItem.date = author.querySelector("i").textContent.trim();
 
         reviews.push(reviewItem);
     })
@@ -226,4 +241,4 @@ function parsePage() {
   };
 }
 
-// window.parsePage = parsePage;
+window.parsePage = parsePage;
