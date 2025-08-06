@@ -79,7 +79,7 @@ function calculateDiscount(oldprice, newprice) {
 }
 
 function calculateDiscountPercent(oldPrice, discount) {
-  return ((discount * 100) / oldPrice).toFixed(2);
+  return ((discount * 100) / oldPrice).toFixed(2) + "%";
 }
 
 function getCurrency(currency) {
