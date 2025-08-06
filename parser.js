@@ -187,16 +187,35 @@ function getSuggested() {
     return suggested;
 }
 
-// function getReviews() {
+function getReviews() {
+    const reviews = [];
 
-// }
+    const reviewsList = document.querySelectorAll(".reviews .items article");
+
+    reviewsList.forEach(item => {
+        const reviewItem = {};
+
+        reviewItem.rating = 0;
+
+        const ratingPoints = item.querySelectorAll(".rating span"); 
+        ratingPoints.forEach(point => {
+            if (point.classList.contains("filled")) {
+                reviewItem.rating++;
+            }
+        })
+
+        reviews.push(reviewItem);
+    })
+
+    return reviews;
+}
 
 function parsePage() {
   return {
     meta: getMeta(),
     product: getProduct(),
     suggested: getSuggested(),
-    reviews: [],
+    reviews: getReviews(),
   };
 }
 
